@@ -3,7 +3,7 @@ import "./App.css";
 function App() {
   return (
     <>
-      <div>Welcome style keeper</div>
+      <h1 className="text-3xl font-bold underline">Welcome Style Keeper</h1>
     </>
   );
 }
