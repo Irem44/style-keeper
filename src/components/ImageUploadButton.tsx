@@ -1,41 +1,22 @@
-import { useRef } from "react";
+import type { UseFormRegisterReturn } from "react-hook-form";
 
-const ImageUploadButton = () => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+interface Props {
+  register: UseFormRegisterReturn;
+}
 
-  const handleButtonClick = () => {
-    // Kendi butonumuza basıldığında gizli input'u tetikliyoruz
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      console.log("Seçilen dosya:", file.name);
-      // Burada dosyayı önizleme veya yükleme işlemlerini yapabilirsin
-    }
-  };
-
+const ImageUploadButton = ({ register }: Props) => {
   return (
-    <div className="flex flex-col items-center gap-4">
-      {/* Gizli Input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        className="hidden"
-        accept="image/*" // Sadece resim dosyalarına izin verir
-      />
-
-      {/* Görünecek Şık Buton */}
-      <button
-        onClick={handleButtonClick}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg 
-                   transition-all duration-300 transform hover:scale-105 shadow-md
-                   flex items-center gap-2"
+    <div className="flex flex-col gap-2">
+      {/* Buraya tasarımımız gelecek */}
+      <label
+        htmlFor={register.name}
+        className="border-2 border-dashed border-white bg-pink-100 p-4 rounded-xl text-center cursor-pointer hover:bg-pink-200 transition-all
+        mt-3 
+        "
       >
-        Select Image
-      </button>
+        <span className="text-pink-600">📸 Fotoğraf Seç</span>
+      </label>
+      <input type="file" id={register.name} className="hidden" {...register} />
     </div>
   );
 };
