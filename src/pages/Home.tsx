@@ -2,10 +2,22 @@ import { Plus } from "lucide-react";
 import Header from "../components/Header";
 import { useState } from "react";
 import SideBar from "../components/SideBar";
+import { supabase } from "../lib/supabase";
 
 const Home = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
   const [showPlus, setShowPlus] = useState<boolean>(true);
+
+  //Get Data
+  const getData = async () => {
+    try {
+      const { data, error } = await supabase.from("clothes").select("*");
+
+      console.log("Data", data);
+    } catch (error) {
+      console.error("Veri alınırken hata oluştu:", error);
+    }
+  };
   return (
     <div className="flex flex-col">
       <Header />
@@ -30,7 +42,15 @@ const Home = () => {
           )}
         </div>
 
-        {isSideBarOpen && <SideBar />}
+        {isSideBarOpen && (
+          <SideBar
+            open={isSideBarOpen}
+            setOpen={(open) => setIsSideBarOpen(open)}
+            onSuccess={() => {
+              getData();
+            }}
+          />
+        )}
       </div>
     </div>
   );

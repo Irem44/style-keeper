@@ -5,6 +5,7 @@ import CustomInput from "./CustomInput";
 import ImageUploadButton from "./ImageUploadButton";
 import CustomButton from "./CustomButton";
 import { X } from "lucide-react";
+import { toast } from "sonner";
 
 interface CreationFormType {
   id: number;
@@ -16,13 +17,21 @@ interface CreationFormType {
     imageFile: FileList;
   };
 }
-const SideBar = () => {
+interface SideBarProps {
+  open: boolean;
+  setOpen: (state: boolean) => void;
+  onSuccess: () => void;
+}
+const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
+  //Form
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<CreationFormType>();
+
+  //Submit
   const onSubmit = async (data: CreationFormType) => {
     try {
       const file = data.product.imageFile[0];
@@ -57,7 +66,12 @@ const SideBar = () => {
 
       if (insertError) throw insertError;
 
-      alert("Ürün başarıyla eklendi! 🎉");
+      // alert("Ürün başarıyla eklendi! 🎉");
+      toast.success("Ürün başarıyla eklendi! ✨", {
+        description: "Veriler başarıyla kaydedildi",
+      });
+      onSuccess();
+      setOpen(false);
       // reset(); // Formu temizle
     } catch (error: any) {
       alert("Hata oluştu: " + error.message);
@@ -65,7 +79,7 @@ const SideBar = () => {
     }
   };
   return (
-    <div className="w-[500px] h-full rounded-l-2xl bg-[#F39CC1] flex flex-col p-4 ">
+    <div className="w-125 h-full rounded-l-2xl bg-[#F39CC1] flex flex-col p-4 ">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-end p-2">
           <X className=" cursor-pointer" />
