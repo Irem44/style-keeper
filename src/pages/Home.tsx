@@ -26,7 +26,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col w-full min-h-screen">
+    <div className="flex flex-col w-full min-h-screen bg-pink-100 ">
       <Header setIsSideBarOpen={setIsSideBarOpen} />
 
       {showPlus && data?.lenght === 0 && (
@@ -55,7 +55,7 @@ const Home = () => {
           }}
         />
       )}
-      <div className="grid grid-cols-4 p-4 mt-4 gap-2 justify-items-center">
+      <div className="grid grid-cols-1  sm:grid-cols-2   lg:grid-cols-2 xl:grid-cols-3 p-4 mt-4 gap-5 justify-items-center">
         {data && data.length > 0
           ? data.map((item: any) => {
               return (

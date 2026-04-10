@@ -147,77 +147,84 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
     ShoppingBag,
   ];
   return (
-    <div
-      className="fixed top-20 right-0 h-[calc(100vh-80px)] w-125 bg-[#F39CC1] shadow-2xl p-2"
-      ref={container}
-    >
-      {/* 1. Arka Planda Uçuşan Kıyafetler */}
-      <div className="absolute inset-0 pointer-events-none">
-        {floatingIcons.map((Icon, i) => {
-          const randomSize = Math.floor(Math.random() * 30 + 20); // 20px-50px arası
-          return (
-            <div
-              key={i}
-              className="clothing-item absolute -bottom-20"
-              style={{ left: Math.random() * 80 + 10 + "%" }}
-            >
-              <Icon size={randomSize} color="#D22E74" strokeWidth={1} />
-            </div>
-          );
-        })}
-      </div>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="relative z-10 flex flex-col gap-2"
+    <>
+      <div
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-998 transition-opacity duration-500"
+        onClick={() => setOpen(false)}
+      />
+      <div
+        className="fixed top-0 right-0 w-full h-screen  bg-[#f3a8c7] shadow-2xl p-6 z-999 overflow-hidden"
+        ref={container}
       >
-        <div className="w-full flex justify-end p-2 form-item">
-          <X className=" cursor-pointer" onClick={() => setOpen(false)} />
+        {/* 1. Arka Planda Uçuşan Kıyafetler */}
+        <div className="absolute inset-0 pointer-events-none">
+          {floatingIcons.map((Icon, i) => {
+            const randomSize = Math.floor(Math.random() * 30 + 20); // 20px-50px arası
+            return (
+              <div
+                key={i}
+                className="clothing-item absolute -bottom-20"
+                style={{ left: Math.random() * 80 + 10 + "%" }}
+              >
+                <Icon size={randomSize} color="#D22E74" strokeWidth={1} />
+              </div>
+            );
+          })}
         </div>
-        <div className="form-item">
-          <CustomInput
-            label="Mağaza Adı"
-            register={register("shopName")}
-            type="text"
-            className="bg-white  w-full"
-            labelClassName="w-[130px]"
-          />
-        </div>
-        <div className="form-item">
-          <CustomInput
-            label="Ürün Adı"
-            register={register("product.name")}
-            type="text"
-            className="bg-white w-full "
-            labelClassName="w-[130px]"
-          />
-        </div>
-        <div className="form-item">
-          <CustomInput
-            label="Kategori"
-            register={register("product.category")}
-            type="text"
-            className="bg-white w-full"
-            labelClassName="w-[130px]"
-          />
-        </div>
-        <div className="form-item">
-          <CustomInput
-            label="Fiyat"
-            register={register("product.price")}
-            type="number"
-            className="bg-white w-full"
-            labelClassName="w-[130px]"
-          />
-        </div>
-        <div className="form-item"></div>
-        <div className="form-item">
-          <ImageUploadButton register={register("product.imageFile")} />
-        </div>
-        <div className="w-full flex justify-end items-center form-item">
-          <CustomButton type="submit">Ekle</CustomButton>
-        </div>
-      </form>
-    </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="relative z-10 flex flex-col gap-6 "
+        >
+          <div className="w-full flex justify-end p-2 form-item">
+            <X className=" cursor-pointer" onClick={() => setOpen(false)} />
+          </div>
+          <div className="form-item">
+            <CustomInput
+              label="Mağaza Adı"
+              register={register("shopName")}
+              type="text"
+              className="bg-white w-full"
+              labelClassName="w-[130px] "
+            />
+          </div>
+          <div className="form-item">
+            <CustomInput
+              label="Ürün Adı"
+              register={register("product.name")}
+              type="text"
+              className="bg-white w-full "
+              labelClassName="w-[130px]"
+            />
+          </div>
+          <div className="form-item">
+            <CustomInput
+              label="Kategori"
+              register={register("product.category")}
+              type="text"
+              className="bg-white w-full"
+              labelClassName="w-[130px]"
+            />
+          </div>
+          <div className="form-item">
+            <CustomInput
+              label="Fiyat"
+              register={register("product.price")}
+              type="number"
+              className="bg-white w-full"
+              labelClassName="w-[130px]"
+            />
+          </div>
+          <div className="form-item"></div>
+          <div className="form-item">
+            <ImageUploadButton register={register("product.imageFile")} />
+          </div>
+          <div className="w-full flex justify-end items-center form-item">
+            <CustomButton type="submit">Ekle</CustomButton>
+          </div>
+        </form>
+      </div>
+      <div />
+    </>
   );
 };
 export default SideBar;
