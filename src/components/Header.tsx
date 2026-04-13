@@ -1,6 +1,6 @@
 import CustomButton from "./CustomButton";
 import gorsel from "../assets/Adobe Express - file.png";
-import { Heart } from "lucide-react";
+import { Heart, Plus } from "lucide-react";
 interface HeaderProps {
   setIsSideBarOpen: (value: boolean) => void;
 }
@@ -16,7 +16,7 @@ const Header = ({ setIsSideBarOpen }: HeaderProps) => {
           className="w-25! h-10!"
           onClick={() => setIsSideBarOpen(true)}
         >
-          Ekle
+          <Plus />
         </CustomButton>
         <Heart className="text-pink-100 fill-pink-100 h-8 w-8" />
       </div>

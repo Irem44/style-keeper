@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 interface CustomButtonProps {
   type: "submit" | "reset" | "button";
   className?: string;
-  children: string;
+  children: ReactNode;
   onClick?: () => void;
 }
 
