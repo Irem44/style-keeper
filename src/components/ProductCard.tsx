@@ -15,7 +15,6 @@ const ProductCard = ({
   id,
   shopName,
   productName,
-  productCategory,
   productPrice,
   imageUrl,
 }: ProductCardProps) => {
@@ -52,11 +51,11 @@ const ProductCard = ({
         className="absolute inset-0 w-full h-full object-contain z-0 transition-transform duration-300 group-hover:scale-110"
       />
 
-      <div className="absolute inset-0 bg-black/40 z-10" />
+      <div className="absolute inset-0 bg-black/40 z-10 " />
       <div className="relative z-20 flex flex-col items-center  text-white drop-shadow-md p-2">
         <span className="text-2xl font-light">{shopName}</span>
         <span className="text-lg font-bold">{productName}</span>
-        <span className="mt-2 font-semibold bg-[#F39CC1] px-3 py-1 rounded-full text-black">
+        <span className="mt-2 font-bold bg-[#F39CC1] px-5 py-2 rounded-full text-black">
           {productPrice} TL
         </span>
       </div>
