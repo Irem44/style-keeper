@@ -1,6 +1,6 @@
 import { toast, Toaster } from "sonner";
 import "./App.css";
-import Home from "./pages/Home";
+import PageRoutes from "./routes/PageRoutes";
 
 function App() {
   // toast.success("Başarılı");
@@ -11,7 +11,7 @@ function App() {
   // toast.warning("Uyarı");
   return (
     <div>
-      <Home />
+      <PageRoutes />
       <div>
         {/* Diğer bileşenlerin (Header, Home vb.) */}
 

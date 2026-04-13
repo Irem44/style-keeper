@@ -153,7 +153,7 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
         onClick={() => setOpen(false)}
       />
       <div
-        className="fixed top-0 right-0 w-full h-screen  bg-[#f3a8c7] shadow-2xl p-6 z-999 overflow-hidden"
+        className="fixed top-0 right-0  sm:w-125  h-screen  bg-[#f3a8c7] shadow-2xl p-6 z-999 overflow-hidden"
         ref={container}
       >
         {/* 1. Arka Planda Uçuşan Kıyafetler */}

@@ -1,6 +1,9 @@
 import { Heart } from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { toast } from "sonner";
 
 interface ProductCardProps {
+  id: number;
   shopName: string;
   productName: string;
   productCategory: string;
@@ -9,15 +12,35 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({
+  id,
   shopName,
   productName,
   productCategory,
   productPrice,
   imageUrl,
 }: ProductCardProps) => {
+  const handleFavorites = async () => {
+    try {
+      const { data, error } = await supabase.from("favorites").insert([
+        {
+          product_id: id,
+        },
+      ]);
+      if (error) {
+        toast.error("Ürün favorilere eklenilmedi");
+      } else {
+        toast.success("Ürün başarıyla favorilere eklendi🎉");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
-    <div className="relative w-86 h-86  lg:w-125 lg:h-125 border border-[#F39CC1] rounded-full flex flex-col items-center justify-end overflow-hidden group">
-      <button className=" top-10 right-13 cursor-pointer absolute lg:top-8 lg:right-8 z-30 p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white transition-all duration-300 group/heart">
+    <div className="relative w-86 h-86  lg:w-100 lg:h-100 border border-[#F39CC1] rounded-full flex flex-col items-center justify-end overflow-hidden group">
+      <button
+        className=" top-10 right-13 cursor-pointer absolute lg:top-14 lg:right-14 z-30 p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white transition-all duration-300 group/heart"
+        onClick={handleFavorites}
+      >
         <Heart
           size={24}
           className="text-white fill-transparent group-hover/heart:fill-pink-500 group-hover/heart:text-pink-500 transition-colors"

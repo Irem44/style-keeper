@@ -61,6 +61,7 @@ const Home = () => {
               return (
                 <ProductCard
                   key={item.id}
+                  id={item.id}
                   shopName={item.shop_name}
                   productName={item.product_name}
                   productCategory={item.product_category}
