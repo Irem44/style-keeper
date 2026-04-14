@@ -3,9 +3,10 @@ import image from "../assets/logo.png";
 import { Heart, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 interface HeaderProps {
-  setIsSideBarOpen: (value: boolean) => void;
+  setIsSideBarOpen?: (value: boolean) => void;
+  showSideBar?: boolean;
 }
-const Header = ({ setIsSideBarOpen }: HeaderProps) => {
+const Header = ({ setIsSideBarOpen, showSideBar }: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
@@ -13,19 +14,21 @@ const Header = ({ setIsSideBarOpen }: HeaderProps) => {
       <div className="relative w-28 h-28 flex items-center justify-center">
         <img src={image} alt="logo bulunamadı" className="object-contain" />
       </div>
-      <div className="flex items-center gap-2 cursor-pointer">
-        <CustomButton
-          type="button"
-          className="w-25! h-10!"
-          onClick={() => setIsSideBarOpen(true)}
-        >
-          <Plus />
-        </CustomButton>
-        <Heart
-          className="text-pink-100 fill-pink-100 h-8 w-8"
-          onClick={() => navigate("/favorites")}
-        />
-      </div>
+      {showSideBar === true && (
+        <div className="flex items-center gap-2 cursor-pointer">
+          <CustomButton
+            type="button"
+            className="w-25! h-10!"
+            onClick={() => setIsSideBarOpen?.(true)}
+          >
+            <Plus />
+          </CustomButton>
+          <Heart
+            className="text-pink-100 fill-pink-100 h-8 w-8"
+            onClick={() => navigate("/favorites")}
+          />
+        </div>
+      )}
     </div>
   );
 };

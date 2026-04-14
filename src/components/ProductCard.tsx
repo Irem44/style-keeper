@@ -26,7 +26,11 @@ const ProductCard = ({
         },
       ]);
       if (error) {
-        toast.error("Ürün favorilere eklenilmedi");
+        if (error.code === "23505") {
+          toast.info("Bu ürün zaten favorilerinizde! ❤️");
+        } else {
+          toast.error("Ürün favorilere eklenemedi");
+        }
       } else {
         toast.success("Ürün başarıyla favorilere eklendi🎉");
       }

@@ -16,7 +16,9 @@ const CustomInput = ({
 }: CustomInputProps) => {
   return (
     <div className="flex flex-row  p-2 items-center justify-center">
-      <label className={`"text-sm  ${labelClassName}`}>{label}</label>
+      <label className={`"text-sm text-[#454040] ${labelClassName}`}>
+        {label}
+      </label>
       <input
         type={type}
         {...register}

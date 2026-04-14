@@ -8,6 +8,7 @@ import CustomTextInput from "../components/CustomTextInput";
 
 const Home = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [showPlus, setShowPlus] = useState<boolean>(true);
   const [data, setData] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -18,12 +19,16 @@ const Home = () => {
 
   const getData = async () => {
     try {
+      setLoading(true);
       const { data, error } = await supabase.from("clothes").select("*");
       if (error) throw error;
       setData(data || []);
       console.log("Veriler Alındı:", data);
     } catch (error) {
       console.error("Veri alınırken hata oluştu:", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,7 +44,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col w-full min-h-screen bg-pink-100">
-      <Header setIsSideBarOpen={setIsSideBarOpen} />
+      <Header setIsSideBarOpen={setIsSideBarOpen} showSideBar={true} />
 
       {/* Arama Alanı */}
       <div className="mt-6 flex justify-center px-4">
@@ -53,7 +58,8 @@ const Home = () => {
       </div>
 
       {/* Boş Durum (Hiç veri yoksa) */}
-      {data.length === 0 && showPlus && (
+
+      {!loading && showPlus && data.length === 0 && (
         <div className="flex justify-center w-full h-[calc(100vh-150px)]">
           <div className="flex flex-col justify-center items-center">
             <Plus

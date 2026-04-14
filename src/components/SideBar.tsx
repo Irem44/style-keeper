@@ -6,7 +6,7 @@ import ImageUploadButton from "./ImageUploadButton";
 import CustomButton from "./CustomButton";
 import { X } from "lucide-react";
 import { toast } from "sonner";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import {
@@ -23,6 +23,7 @@ import {
   Tags,
   Zap,
 } from "lucide-react";
+
 interface CreationFormType {
   id: number;
   shopName: string;
@@ -33,55 +34,78 @@ interface CreationFormType {
     imageFile: FileList;
   };
 }
+
 interface SideBarProps {
   open: boolean;
   setOpen: (state: boolean) => void;
   onSuccess: () => void;
 }
+
 const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
   const container = useRef<HTMLDivElement>(null);
-  //Form
-  const { register, handleSubmit } = useForm<CreationFormType>();
+
+  // Sidebar açıkken arka plan scroll'unu engelle
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [open]);
+
+  const { register, handleSubmit, reset } = useForm<CreationFormType>();
+
   // GSAP Animasyon Bloğu
   useGSAP(
     () => {
       if (open) {
         // 1. Sidebar Giriş Animasyonu
         gsap.from(container.current, {
-          //*Başlangıç noktası-ne
           xPercent: 100,
           duration: 0.6,
-          ease: "power2.out",
+          ease: "power4.out",
         });
 
-        gsap.to(".clothing-item", {
-          y: "-120vh",
-          x: "random(-40, 40)",
-          rotation: "random(-360, 360)", // Döndürerek uçuruyoruz
-          duration: "random(6, 10)", // Biraz daha yavaş ve süzülerek
-          repeat: -1,
-          ease: "none",
-          delay: "random(0, 5)",
-          stagger: {
-            amount: 4,
-            from: "random",
+        // 2. Uçuşan İkonlar Animasyonu (fromTo ile kesin konumlandırma)
+        gsap.fromTo(
+          ".clothing-item",
+          {
+            y: 0, // CSS'teki top: 100% noktasından başlar
+            opacity: 0,
           },
-        });
+          {
+            y: "-125vh", // Sidebar tavanının iyice dışına çıkana kadar yükselir
+            opacity: 0.9,
+            x: "random(-60, 60)",
+            rotation: "random(-360, 360)",
+            duration: "random(8, 12)",
+            repeat: -1,
+            ease: "none",
+            delay: "random(0, 3)",
+            stagger: {
+              amount: 9,
+              from: "random",
+            },
+          },
+        );
 
         // 3. Form Elemanlarının Sırayla Belirmesi
         gsap.from(".form-item", {
-          y: 20,
+          y: 30,
           opacity: 0,
-          duration: 0.4,
+          duration: 0.5,
           stagger: 0.1,
           delay: 0.3,
+          ease: "back.out(1.7)",
         });
       }
     },
     { scope: container, dependencies: [open] },
   );
 
-  //Submit
   const onSubmit = async (data: CreationFormType) => {
     try {
       const file = data.product.imageFile[0];
@@ -89,15 +113,12 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
 
       if (file) {
         const cleanFileName = cleanFileNime(file.name);
-
-        //TODO upload(isimlendirme,dosya):Ben bu ismi ve bu dosyayı aldım storage a yükledim
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from("wardrobe")
           .upload(cleanFileName, file);
 
         if (uploadError) throw uploadError;
 
-        //TODO getPublicUrl(isimlendirme):img tagı ile ulaşabileceğimiz url'e çevirir
         const { data: urlData } = supabase.storage
           .from("wardrobe")
           .getPublicUrl(cleanFileName);
@@ -116,20 +137,18 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
 
       if (insertError) throw insertError;
 
-      // alert("Ürün başarıyla eklendi! 🎉");
-      toast.success("Ürün başarıyla eklendi! ✨", {
-        description: "Veriler başarıyla kaydedildi",
-      });
+      toast.success("Ürün başarıyla eklendi! ✨");
       onSuccess();
       setOpen(false);
-      // reset(); // Formu temizle
+      reset();
     } catch (error: any) {
-      alert("Hata oluştu: " + error.message);
+      toast.error("Hata oluştu: " + error.message);
       console.error(error);
     }
   };
+
   if (!open) return null;
-  // Uçuşacak ikonlar listesi
+
   const floatingIcons = [
     Shirt,
     Watch,
@@ -146,85 +165,98 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
     Shirt,
     ShoppingBag,
   ];
+
   return (
     <>
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-998 transition-opacity duration-500"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-998"
         onClick={() => setOpen(false)}
       />
+
       <div
-        className="fixed top-0 right-0  sm:w-125  h-screen  bg-[#f3a8c7] shadow-2xl p-6 z-999 overflow-hidden"
+        className="fixed inset-y-0 right-0 sm:w-125 w-full bg-[#f3a8c7] shadow-2xl z-999 flex flex-col overflow-hidden"
         ref={container}
       >
-        {/* 1. Arka Planda Uçuşan Kıyafetler */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           {floatingIcons.map((Icon, i) => {
-            const randomSize = Math.floor(Math.random() * 30 + 20); // 20px-50px arası
+            const randomSize = Math.floor(Math.random() * 30 + 20);
             return (
               <div
                 key={i}
-                className="clothing-item absolute -bottom-20"
-                style={{ left: Math.random() * 80 + 10 + "%" }}
+                className="clothing-item absolute"
+                style={{
+                  left: Math.random() * 80 + 10 + "%",
+                  top: "100%",
+                  willChange: "transform",
+                }}
               >
-                <Icon size={randomSize} color="#D22E74" strokeWidth={1} />
+                <Icon size={randomSize} color="#D22E74" strokeWidth={2} />
               </div>
             );
           })}
         </div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="relative z-10 flex flex-col gap-6 "
-        >
-          <div className="w-full flex justify-end p-2 form-item">
-            <X className=" cursor-pointer" onClick={() => setOpen(false)} />
-          </div>
-          <div className="form-item">
-            <CustomInput
-              label="Mağaza Adı"
-              register={register("shopName")}
-              type="text"
-              className="bg-white w-full"
-              labelClassName="w-[130px] "
-            />
-          </div>
-          <div className="form-item">
-            <CustomInput
-              label="Ürün Adı"
-              register={register("product.name")}
-              type="text"
-              className="bg-white w-full "
-              labelClassName="w-[130px]"
-            />
-          </div>
-          <div className="form-item">
-            <CustomInput
-              label="Kategori"
-              register={register("product.category")}
-              type="text"
-              className="bg-white w-full"
-              labelClassName="w-[130px]"
-            />
-          </div>
-          <div className="form-item">
-            <CustomInput
-              label="Fiyat"
-              register={register("product.price")}
-              type="number"
-              className="bg-white w-full"
-              labelClassName="w-[130px]"
-            />
-          </div>
-          <div className="form-item"></div>
-          <div className="form-item">
-            <ImageUploadButton register={register("product.imageFile")} />
-          </div>
-          <div className="w-full flex justify-end items-center form-item">
-            <CustomButton type="submit">Ekle</CustomButton>
-          </div>
-        </form>
+
+        <div className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden p-6 custom-scrollbar">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-6"
+          >
+            <div className="w-full flex justify-end p-2 form-item">
+              <X className="cursor-pointer" onClick={() => setOpen(false)} />
+            </div>
+
+            <div className="form-item">
+              <CustomInput
+                label="Mağaza Adı"
+                register={register("shopName")}
+                type="text"
+                className="bg-white w-full"
+                labelClassName="w-[130px] font-bold"
+              />
+            </div>
+
+            <div className="form-item">
+              <CustomInput
+                label="Ürün Adı"
+                register={register("product.name")}
+                type="text"
+                className="bg-white w-full"
+                labelClassName="w-[130px] font-bold"
+              />
+            </div>
+
+            <div className="form-item">
+              <CustomInput
+                label="Kategori"
+                register={register("product.category")}
+                type="text"
+                className="bg-white w-full"
+                labelClassName="w-[130px] font-bold"
+              />
+            </div>
+
+            <div className="form-item">
+              <CustomInput
+                label="Fiyat"
+                register={register("product.price")}
+                type="number"
+                className="bg-white w-full"
+                labelClassName="w-[130px] font-bold"
+              />
+            </div>
+
+            <div className="form-item pt-2">
+              <ImageUploadButton register={register("product.imageFile")} />
+            </div>
+
+            <div className="w-full flex justify-end items-center form-item pt-4">
+              <CustomButton type="submit">Ekle</CustomButton>
+            </div>
+          </form>
+        </div>
       </div>
-      <div />
     </>
   );
 };
+
 export default SideBar;
