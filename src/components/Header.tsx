@@ -15,7 +15,7 @@ const Header = ({ setIsSideBarOpen, showSideBar }: HeaderProps) => {
         <img src={image} alt="logo bulunamadı" className="object-contain" />
       </div>
       {showSideBar === true && (
-        <div className="flex items-center gap-2 cursor-pointer">
+        <div className="flex items-center gap-2 cursor-pointer pr-3">
           <CustomButton
             type="button"
             className="w-25! h-10!"
