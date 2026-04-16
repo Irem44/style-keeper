@@ -14,37 +14,23 @@ const Favorites = () => {
     try {
       setLoading(true);
 
-      // 1. Önce giriş yapmış kullanıcıyı alalım
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) return; // Kullanıcı yoksa işlem yapma
-
-      // 2. Sorguya user_id filtresi ekleyelim
-      const { data: favoritesData, error } = await supabase
-        .from("favorites")
-        .select(
-          `
+      const { data: favoritesData, error } = await supabase.from("favorites")
+        .select(`
         id, 
         product_id,
-        user_id,
         clothes (
           id,
           product_name,
-          product_price,
           product_category,
-          image_url,
-          shop_name
+          shop_name,
+          product_price,
+          image_url
         )
-      `,
-        )
-        .eq("user_id", user.id); // SADECE BU SATIRI EKLEDİK
+      `);
 
       if (error) throw error;
-
-      // Data boş gelse bile state'i güncellemeliyiz (yükleniyor yazısının gitmesi için)
       setFavoritesProduct(favoritesData || []);
+      console.log("Favorite Data", favoritesData);
     } catch (error) {
       console.error("Favoriler çekilirken hata oluştu:", error);
     } finally {

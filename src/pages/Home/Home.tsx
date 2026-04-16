@@ -61,9 +61,9 @@ const Home = () => {
           />
         </div>
 
-        {/* Sağ taraf: Sadece "Toplam" yazısı kadar yer kaplar */}
-        <div className="text-[#D22E74] w-25 h-10 flex justify-center items-center">
-          Toplam: {sumPrice}
+        <div className="text-white bg-[#D22E74] w-35 h-35 flex flex-col items-center justify-center gap-2 border-2 border-[#D22E74] rounded-full p-2">
+          <span> Sepet Toplam</span>
+          <span> {sumPrice}</span>
         </div>
       </div>
 
