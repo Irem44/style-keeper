@@ -31,11 +31,11 @@ const FavoriteCard = ({
     }
   };
   return (
-    <div className="w-75 h-100 bg-white rounded-3xl overflow-hidden border border-pink-100 flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300">
-      <div className="w-full h-60 bg-[#FDF2F7] flex items-center justify-center p-4 relative ">
+    <div className="w-85 sd:w-85 md:w-85 lg:w-80 xl:w-80 h-100 bg-white rounded-3xl overflow-hidden border border-pink-100 flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300">
+      <div className="w-full h-50 bg-[#FDF2F7] flex items-center justify-center p-4 relative ">
         <div>
           <X
-            className="absolute top-2 right-1.5 text-[#D22E74] cursor-pointer"
+            className="absolute  top-2 right-1.5 text-[#D22E74] cursor-pointer"
             onClick={removeFromFavorites}
           />
         </div>
