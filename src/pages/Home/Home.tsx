@@ -12,7 +12,6 @@ const Home = () => {
   const [showPlus, setShowPlus] = useState<boolean>(true);
   const [data, setData] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
-  // const [sumPrice, setSumPrice] = useState<number>(0);
   useEffect(() => {
     getData();
   }, []);
@@ -20,17 +19,31 @@ const Home = () => {
   const getData = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase.from("clothes").select("*");
+
+      // 1. Önce giriş yapmış kullanıcının bilgilerini alıyoruz
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        console.error("Kullanıcı bulunamadı");
+        return;
+      }
+
+      // 2. Sorguya .eq("user_id", user.id) filtresini ekliyoruz
+      const { data: clothesData, error } = await supabase
+        .from("clothes")
+        .select("*")
+        .eq("user_id", user.id); // Sadece bana ait olanları getir!
+
       if (error) throw error;
-      setData(data || []);
+      setData([...(clothesData || [])]);
     } catch (error) {
       console.error("Veri alınırken hata oluştu:", error);
-      setLoading(false);
     } finally {
       setLoading(false);
     }
   };
-
   // Filtreleme Mantığı: Her render'da güncel searchValue'a göre data'yı süzüyoruz
   const filteredData = data.filter((item: any) => {
     const search = searchValue.toLowerCase();

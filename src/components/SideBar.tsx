@@ -105,26 +105,46 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
     },
     { scope: container, dependencies: [open] },
   );
-
   const onSubmit = async (data: CreationFormType) => {
     try {
+      // 1. Giriş yapmış kullanıcıyı al (Hayati önem taşıyor!)
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        toast.error(
+          "Oturum süreniz dolmuş olabilir. Lütfen tekrar giriş yapın.",
+        );
+        return;
+      }
+
       const file = data.product.imageFile[0];
       let publicUrl = "";
 
       if (file) {
         const cleanFileName = cleanFileNime(file.name);
+
+        // 2. Storage politikasına uygun olarak resmi kullanıcı klasörüne yükle
+        // Format: user_id/timestamp_dosyaadi.png (Aynı isimli dosyaların çakışmaması için timestamp ekledim)
+        const filePath = `${user.id}/${Date.now()}_${cleanFileName}`;
+
         const { error: uploadError } = await supabase.storage
           .from("wardrobe")
-          .upload(cleanFileName, file);
+          .upload(filePath, file);
 
         if (uploadError) throw uploadError;
 
+        // 3. Resmin URL'ini al
         const { data: urlData } = supabase.storage
           .from("wardrobe")
-          .getPublicUrl(cleanFileName);
+          .getPublicUrl(filePath);
+
         publicUrl = urlData.publicUrl;
       }
 
+      // 4. Veritabanına user_id ile birlikte kaydet
       const { error: insertError } = await supabase.from("clothes").insert([
         {
           product_name: data.product.name,
@@ -132,13 +152,15 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
           product_price: data.product.price,
           shop_name: data.shopName,
           image_url: publicUrl,
+          user_id: user.id, // RLS ve Foreign Key için bu şart!
         },
       ]);
 
       if (insertError) throw insertError;
 
-      toast.success("Ürün başarıyla eklendi! ✨");
-      onSuccess();
+      toast.success("Ürün gardırobuna eklendi! ✨");
+
+      await onSuccess();
       setOpen(false);
       reset();
     } catch (error: any) {

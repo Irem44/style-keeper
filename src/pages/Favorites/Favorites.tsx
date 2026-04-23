@@ -49,6 +49,10 @@ const Favorites = () => {
       cloth.product_price?.toString().toLowerCase().includes(search)
     );
   });
+  const sumPrice = filteredData?.reduce(
+    (acc, item: any) => acc + (item.clothes?.product_price || 0),
+    0,
+  );
   return (
     <div className="bg-pink-100">
       <Header showSideBar={false} />
@@ -62,7 +66,7 @@ const Favorites = () => {
         <h1 className="text-[#D22E74]  font-bold italic">Favorilerim</h1>
       </div>
       {/* Arama Alanı */}
-      <div className="mt-6 flex justify-center px-4">
+      <div className="mt-6 flex flex-col items-center justify-center   md:grid  md:grid-cols-[1fr_auto] lg:grid  lg:grid-cols-[1fr_auto]items-center px-4 gap-4">
         <CustomTextInput
           type="text"
           value={searchValue}
@@ -70,6 +74,10 @@ const Favorites = () => {
           icon={<Search className="text-[#D22E74]" />}
           placeHolder="Ürün Ara..."
         />
+        <div className="text-white bg-[#D22E74] w-35 h-35 flex flex-col items-center justify-center gap-2 border-2 border-[#D22E74] rounded-full p-2">
+          <span> Sepet Toplam</span>
+          <span> {sumPrice}</span>
+        </div>
       </div>
 
       <div className="w-full  min-h-screen grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 p-10 justify-items-center">

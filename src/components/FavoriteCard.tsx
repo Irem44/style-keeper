@@ -31,7 +31,7 @@ const FavoriteCard = ({
     }
   };
   return (
-    <div className="w-85 sd:w-85 md:w-85 lg:w-80 xl:w-80 h-100 bg-white rounded-3xl overflow-hidden border border-pink-100 flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300">
+    <div className="w-80 sm:w-85 md:w-85 lg:w-80 xl:w-80 h-85 lg:h-100 xl:h-100 bg-white rounded-3xl overflow-hidden border border-pink-100 flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300">
       <div className="w-full h-50 bg-[#FDF2F7] flex items-center justify-center p-4 relative ">
         <div>
           <X
@@ -42,7 +42,7 @@ const FavoriteCard = ({
         <img
           src={image_url}
           alt={product_name}
-          className="max-w-full max-h-full object-contain drop-shadow-md"
+          className="w-full h-full object-contain drop-shadow-md"
         />
       </div>
 
