@@ -74,8 +74,8 @@ const Home = () => {
           />
         </div>
 
-        <div className="text-white bg-[#D22E74] w-35 h-35 flex flex-col items-center justify-center gap-2 border-2 border-[#D22E74] rounded-full p-2">
-          <span> Sepet Toplam</span>
+        <div className="text-white bg-[#D22E74] w-25 h-25  flex flex-col items-center justify-center gap-2 border-2 border-[#D22E74] rounded-full p-2">
+          <span>Toplam</span>
           <span> {sumPrice}</span>
         </div>
       </div>
