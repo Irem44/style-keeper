@@ -58,7 +58,7 @@ const Home = () => {
     0,
   );
   return (
-    <div className="flex flex-col w-full min-h-screen bg-pink-100">
+    <div className="flex-1 flex flex-col w-full min-h-screen bg-pink-100">
       <Header setIsSideBarOpen={setIsSideBarOpen} showSideBar={true} />
 
       {/* Arama Alanı */}
@@ -82,18 +82,18 @@ const Home = () => {
 
       {/* Boş Durum (Hiç veri yoksa) */}
       {!loading && showPlus && data.length === 0 && (
-        <div className="flex justify-center w-full h-[calc(100vh-150px)]">
-          <div className="flex flex-col justify-center items-center">
+        <div className="flex-1 flex flex-col justify-center items-center w-full">
+          <div className="flex flex-col items-center gap-4">
             <Plus
               size={85}
               strokeWidth={2}
-              className="bg-[#F39CC1] p-4 rounded-2xl cursor-pointer text-white hover:bg-[#D22E74] transition-colors"
+              className="bg-[#F39CC1] p-4 rounded-3xl cursor-pointer text-white hover:bg-[#D22E74] transition-colors"
               onClick={() => {
                 setIsSideBarOpen(true);
                 setShowPlus(false);
               }}
             />
-            <span className="text-[#D22E74] mt-4 font-semibold">
+            <span className="text-[#D22E74] font-medium text-lg">
               İlk Deponuzu Oluşturun
             </span>
           </div>
