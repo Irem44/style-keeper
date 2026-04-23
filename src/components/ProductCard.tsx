@@ -6,7 +6,6 @@ interface ProductCardProps {
   id: number;
   shopName: string;
   productName: string;
-  productCategory: string;
   productPrice: number;
   imageUrl: string;
   setData: React.Dispatch<React.SetStateAction<any[]>>;
@@ -16,14 +15,13 @@ const ProductCard = ({
   id,
   shopName,
   productName,
-  productCategory,
   productPrice,
   imageUrl,
   setData,
 }: ProductCardProps) => {
   const handleFavorites = async () => {
     try {
-      const { data, error } = await supabase.from("favorites").insert([
+      const { error } = await supabase.from("favorites").insert([
         {
           product_id: id,
         },

@@ -120,7 +120,6 @@ const Home = () => {
               id={item.id}
               shopName={item.shop_name}
               productName={item.product_name}
-              productCategory={item.product_category}
               productPrice={item.product_price}
               imageUrl={item.image_url}
               setData={setData}
