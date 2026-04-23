@@ -45,30 +45,16 @@ const Header = ({ setIsSideBarOpen, showSideBar }: HeaderProps) => {
       </div>
 
       {showSideBar === true && (
-        <div className="flex items-center gap-4 cursor-pointer pr-5">
+        <div className="flex items-center gap-2 cursor-pointer pr-2">
           {/* Kullanıcı İsmi (Opsiyonel) */}
           <div className="hidden md:flex items-center gap-2 text-pink-100 text-sm italic">
             <UserIcon size={16} />
             <span>{userName}</span>
           </div>
-
-          <CustomButton
-            type="button"
-            className="w-25! h-10!"
-            onClick={() => setIsSideBarOpen?.(true)}
-          >
-            <Plus />
-          </CustomButton>
-
-          <Heart
-            className="text-pink-100 fill-pink-100 h-8 w-8 hover:scale-110 transition-transform"
-            onClick={() => navigate("/favorites")}
-          />
-
           {/* Çıkış Yap Butonu */}
           <button
             onClick={handleLogout}
-            className="ml-2 p-2 hover:bg-white/10 rounded-full transition-colors group"
+            className="p-2 hover:bg-white/10 rounded-full transition-colors group"
             title="Çıkış Yap"
           >
             <LogOut
@@ -76,6 +62,17 @@ const Header = ({ setIsSideBarOpen, showSideBar }: HeaderProps) => {
               size={24}
             />
           </button>
+          <Heart
+            className="text-pink-100 fill-pink-100 h-8 w-8 hover:scale-110 transition-transform"
+            onClick={() => navigate("/favorites")}
+          />
+          <CustomButton
+            type="button"
+            className="w-25! h-10!"
+            onClick={() => setIsSideBarOpen?.(true)}
+          >
+            <Plus />
+          </CustomButton>
         </div>
       )}
     </div>
