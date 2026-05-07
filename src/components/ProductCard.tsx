@@ -1,8 +1,9 @@
-import { Heart, Trash } from "lucide-react";
+import { Heart, Pencil, Trash } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmDialog from "./ConfirmDialog";
+import SideBar from "./SideBar";
 
 interface ProductCardProps {
   id: number;
@@ -22,6 +23,9 @@ const ProductCard = ({
   setData,
 }: ProductCardProps) => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+  const [detailProduct, setDetailProduct] = useState<any>(null);
+  const [updateProduct, setUpdateProduct] = useState<boolean>(false);
+  useEffect(() => {}, [detailProduct]);
   const handleFavorites = async () => {
     try {
       const { error } = await supabase.from("favorites").insert([
@@ -45,13 +49,17 @@ const ProductCard = ({
   const removeClothes = async () => {
     try {
       const { error } = await supabase.from("clothes").delete().eq("id", id);
-
       if (error) throw error;
       setData((prev: any) => prev.filter((item: any) => item.id !== id));
       toast.success("Silme işlemi başarılı!");
     } catch (error) {
       console.error(error);
     }
+  };
+  console.log("product card render oldu id:", id);
+  const findProduct = async () => {
+    const response = await supabase.from("clothes").select("*").eq("id", id);
+    setDetailProduct(response.data?.[0] || null);
   };
   return (
     <div>
@@ -66,10 +74,22 @@ const ProductCard = ({
           />
         </button>
         <button
-          className=" top-22 right-10 cursor-pointer absolute lg:top-25 lg:right-10 z-30 p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white transition-all duration-300 group/heart"
+          className=" top-22 right-8 cursor-pointer absolute lg:top-25 lg:right-10 z-30 p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white transition-all duration-300 group/heart"
           onClick={() => setOpenConfirmDialog(true)}
         >
           <Trash
+            size={24}
+            className="text-white fill-transparent group-hover/heart:fill-pink-500 group-hover/heart:text-pink-500 transition-colors"
+          />
+        </button>
+        <button
+          className=" top-35 right-3 cursor-pointer absolute lg:top-25 lg:right-10 z-30 p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white transition-all duration-300 group/heart"
+          onClick={() => {
+            findProduct();
+            setUpdateProduct(true);
+          }}
+        >
+          <Pencil
             size={24}
             className="text-white fill-transparent group-hover/heart:fill-pink-500 group-hover/heart:text-pink-500 transition-colors"
           />
@@ -96,6 +116,15 @@ const ProductCard = ({
           title="Ürünü Sil"
           onConfirm={removeClothes}
           buttonTitle="Sil"
+        />
+      )}
+      {updateProduct && (
+        <SideBar
+          open={updateProduct}
+          setOpen={(open) => setUpdateProduct(open)}
+          onSuccess={() => {
+            console.log("update product success");
+          }}
         />
       )}
     </div>

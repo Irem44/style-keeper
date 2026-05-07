@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { User, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import { toast } from "sonner";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const SignUp = () => {
 
     // Basit doğrulama
     if (formData.password !== formData.confirmPassword) {
-      alert("Şifreler uyuşmuyor!");
+      toast.error("Şifreler eşleşmiyor!");
       return;
     }
 
@@ -41,9 +42,9 @@ const SignUp = () => {
     });
 
     if (error) {
-      alert("Hata: " + error.message);
+      toast.error("Şifre uzunluğu en az 6 karakter olamlıdır");
     } else {
-      alert("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.");
+      toast.success("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.");
       navigate("/signin");
     }
 

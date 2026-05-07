@@ -2,9 +2,10 @@ import type { UseFormRegisterReturn } from "react-hook-form";
 
 interface Props {
   register: UseFormRegisterReturn;
+  required?: boolean;
 }
 
-const ImageUploadButton = ({ register }: Props) => {
+const ImageUploadButton = ({ register, required = false }: Props) => {
   return (
     <div className="flex flex-col gap-2">
       {/* Buraya tasarımımız gelecek */}
@@ -16,7 +17,13 @@ const ImageUploadButton = ({ register }: Props) => {
       >
         <span className="text-pink-600">📸 Fotoğraf Seç</span>
       </label>
-      <input type="file" id={register.name} className="hidden" {...register} />
+      <input
+        type="file"
+        id={register.name}
+        className="hidden"
+        {...register}
+        required={required}
+      />
     </div>
   );
 };

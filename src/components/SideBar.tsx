@@ -142,27 +142,31 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
           .getPublicUrl(filePath);
 
         publicUrl = urlData.publicUrl;
+
+        // 4. Veritabanına user_id ile birlikte kaydet
+        const { error: insertError } = await supabase.from("clothes").insert([
+          {
+            product_name: data.product.name,
+            product_category: data.product.category,
+            product_price: data.product.price,
+            shop_name: data.shopName,
+            image_url: publicUrl,
+            user_id: user.id, // RLS ve Foreign Key için bu şart!
+          },
+        ]);
+
+        if (insertError) {
+          alert("Ürün eklenirken bir hata oluştu: ");
+        } else {
+          toast.success("Ürün gardırobuna eklendi! ✨");
+
+          await onSuccess();
+          setOpen(false);
+          reset();
+        }
+      } else {
+        toast.error("Lütfen bir resim dosyası seçin.");
       }
-
-      // 4. Veritabanına user_id ile birlikte kaydet
-      const { error: insertError } = await supabase.from("clothes").insert([
-        {
-          product_name: data.product.name,
-          product_category: data.product.category,
-          product_price: data.product.price,
-          shop_name: data.shopName,
-          image_url: publicUrl,
-          user_id: user.id, // RLS ve Foreign Key için bu şart!
-        },
-      ]);
-
-      if (insertError) throw insertError;
-
-      toast.success("Ürün gardırobuna eklendi! ✨");
-
-      await onSuccess();
-      setOpen(false);
-      reset();
     } catch (error: any) {
       toast.error("Hata oluştu: " + error.message);
       console.error(error);
@@ -234,6 +238,7 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
                 type="text"
                 className="bg-white w-full"
                 labelClassName="w-[130px] font-bold"
+                required={true}
               />
             </div>
 
@@ -244,6 +249,7 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
                 type="text"
                 className="bg-white w-full"
                 labelClassName="w-[130px] font-bold"
+                required={true}
               />
             </div>
 
@@ -254,6 +260,7 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
                 type="text"
                 className="bg-white w-full"
                 labelClassName="w-[130px] font-bold"
+                required={true}
               />
             </div>
 
@@ -264,6 +271,7 @@ const SideBar = ({ open, setOpen, onSuccess }: SideBarProps) => {
                 type="number"
                 className="bg-white w-full"
                 labelClassName="w-[130px] font-bold"
+                required={true}
               />
             </div>
 

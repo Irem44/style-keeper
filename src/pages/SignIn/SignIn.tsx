@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import { toast } from "sonner";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // Yüklenme durumu
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -21,7 +22,7 @@ const SignIn = () => {
 
     if (error) {
       // Hata varsa kullanıcıya bildir
-      alert("Giriş hatası: " + error.message);
+      toast.error("Giriş yapılamadı.Posta veya şifrenizi kontrol edin!");
     } else {
       // Başarılıysa ana sayfaya yönlendir
       navigate("/");
