@@ -67,14 +67,16 @@ const Favorites = () => {
       </div>
       {/* Arama Alanı */}
       <div className="mt-6 flex flex-col items-center justify-center   md:grid  md:grid-cols-[1fr_auto] lg:grid  lg:grid-cols-[1fr_auto]items-center px-4 gap-4">
-        <CustomTextInput
-          type="text"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          icon={<Search className="text-[#D22E74]" />}
-          placeHolder="Ürün Ara..."
-        />
-        <div className="text-white bg-[#D22E74] w-25 h-25 flex flex-col items-center justify-center gap-2 border-2 border-[#D22E74] rounded-full p-2">
+        <div className="flex justify-center">
+          <CustomTextInput
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            icon={<Search className="text-[#D22E74]" />}
+            placeHolder="Ürün Ara..."
+          />
+        </div>
+        <div className="text-white bg-[#D22E74] w-25 h-25  flex flex-col items-center justify-center gap-2 border-2 border-[#D22E74] rounded-full p-2">
           <span>Toplam</span>
           <span> {sumPrice}</span>
         </div>
