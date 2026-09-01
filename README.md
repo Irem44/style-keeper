@@ -192,10 +192,5 @@ You'll also need a **Storage bucket** named `wardrobe` for image uploads, plus *
 | `npm run build` | Builds the app for production |
 | `npm run preview` | Previews the production build |
 
----
-
-<div align="center">
-
-Made with 💗
 
 </div>
